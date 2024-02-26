@@ -23,11 +23,18 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: lowercase github.repository
+        run: |
+          echo "lc_repository=`echo ${{github.repository}} | tr '[:upper:]' '[:lower:]'`" >>${GITHUB_ENV}
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
+        env:
+
         with:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ env.lc_repository }}:latest
 
