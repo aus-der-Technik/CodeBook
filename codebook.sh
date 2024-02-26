@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 
+#
+# Setup script to run CodeBook on current folder
+#
+# curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/codebook.sh | sh -
+#
+
 set -e
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/" >/dev/null 2>&1 && pwd)"
+curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/.env >> .env
+if [ ! -f "${SCRIPT_DIR}/docker-compose.yaml" ]; then
+  curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/docker-compose.yaml >> docker-compose.yaml
+fi
 
-mkdir -p "${SCRIPT_DIR}/Project"
-SCRIPT_DIR=${SCRIPT_DIR} FOLDER="${PWD}/Project" docker-compose \
+
+SCRIPT_DIR=${SCRIPT_DIR} docker-compose \
     -f "${SCRIPT_DIR}/docker-compose.yaml" \
     --env-file "${SCRIPT_DIR}/.env" \
     up \

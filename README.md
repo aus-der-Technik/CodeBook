@@ -7,10 +7,11 @@ The goal for this Project is to provide an environment for teaching and learning
 provide a unified environment for data scientists and code enthusiasts. 
 
 ## Supported languages
-- python
 - c
 - perl
+- bash
 - node / typescript
+- python
 - swift 
   
 
@@ -31,9 +32,19 @@ provide a unified environment for data scientists and code enthusiasts.
 - Go
 
 # How to run codebook
+
+## From Source
 1. download the sources from github
 2. build the container with `./build.sh`
 3. run it `run.sh`
 
+Wait until your browser opens
 
+![Screenshot](Resources/screenshot.png "CodeBook Screenshot")
 
+## Quick code from withhin the current directory 
+```
+curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/codebook.sh | sh -
+```
+
+This will download the docker-compose file and start CodeBook from the current directory 

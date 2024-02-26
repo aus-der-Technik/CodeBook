@@ -49,11 +49,11 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Install Spark
 # ----------------------------------------------------------------------------------------
 WORKDIR /opt/spark
-RUN wget https://archive.apache.org/dist/spark/spark-3.0.2/spark-3.0.2-bin-hadoop3.2.tgz; \
-    tar -xvzf spark-3.0.2-bin-hadoop3.2.tgz; \
-    rm spark-3.0.2-bin-hadoop3.2.tgz
-ENV SPARK_HOME=/opt/spark/spark-3.0.2-bin-hadoop3.2
-RUN echo 'SPARK_HOME=/opt/spark/spark-3.0.2-bin-hadoop3.2' >> /root/.bashrc 
+RUN wget https://archive.apache.org/dist/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgz; \
+    tar -xvzf spark-3.5.1-bin-hadoop3.tgz; \
+    rm spark-3.5.1-bin-hadoop3.tgz
+ENV SPARK_HOME=/opt/spark/spark-3.5.2-bin-hadoop3
+RUN echo 'SPARK_HOME=/opt/spark/spark-3.5.2-bin-hadoop3' >> /root/.bashrc
 RUN echo 'PATH="$JAVA_HOME/bin:$SPARK_HOME/bin:$PATH"' >> /root/.bashrc 
 RUN pip install findspark
 
@@ -82,44 +82,15 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh
 ADD Sources/*.vsix /extensions/install/
 RUN chmod -R 777 /extensions
 
-# Run this as a user
+# Install public extensions
+RUN for ext in vadimcn.vscode-lldb zaaack.markdown-editor ms-toolsai.jupyter ms-python.python stateful.runme rust-lang.rust; do \
+  code-server --disable-telemetry --extensions-dir /extensions --install-extension ${ext}; \
+  done;
 
-RUN code-server \
-  --disable-telemetry \
-  --extensions-dir /extensions \
-  --install-extension /extensions/install/sswg.swift-lang-1.4.0.vsix
-
-RUN code-server \
-  --disable-telemetry \
-  --extensions-dir /extensions \
-  --install-extension vadimcn.vscode-lldb
-
-RUN code-server \
-  --disable-telemetry \
-  --extensions-dir /extensions \
-  --install-extension zaaack.markdown-editor
-
-RUN code-server \
-  --disable-telemetry \
-  --extensions-dir /extensions \
-  --install-extension ms-toolsai.jupyter
-
-RUN code-server \
-  --disable-telemetry \
-  --extensions-dir /extensions \
-  --install-extension ms-python.python
-
-RUN code-server \
-  --disable-telemetry \
-  --extensions-dir /extensions \
-  --install-extension stateful.runme
-
-
-RUN code-server \
-  --disable-telemetry \
-  --extensions-dir /extensions \
-  --install-extension rust-lang.rust
-
+# Install user extensions
+RUN for ext in $(find /extensions/install/ -name "*.vsix"); do \
+  code-server --disable-telemetry --extensions-dir /extensions --install-extension ${ext}; \
+  done;
 
 
 RUN rm -rf /extensions/install/*
@@ -137,7 +108,6 @@ RUN pip3 install /extensions/kernel/echo_kernel
 RUN pip3 install /extensions/kernel/swift_kernel
 
 # RUN cargo install evcxr_jupyter -> 6.7
-
 
 # Setting the startp
 # ----------------------------------------------------------------------------------------
