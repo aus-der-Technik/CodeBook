@@ -1,0 +1,50 @@
+[build-system]
+requires = [
+    "hatchling>=1.10.0", "ipykernel"
+]
+build-backend = "hatchling.build"
+
+[project]
+name = "swift-kernel"
+dynamic = [
+    "version",
+]
+description = "Simple kernel for Jupyter to wrap Swift"
+readme = "README.rst"
+license = { file = "LICENSE" }
+authors = [
+    { name = "aus der Technik", email = "kris@ausdertechnik.de" },
+]
+classifiers = [
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "ipykernel",
+    "jupyter_client",
+]
+
+[project.optional-dependencies]
+test = [
+  "jupyter_kernel_test",
+]
+
+[project.urls]
+Homepage = "https://github.com/krissimon/swift_kernel"
+
+[tool.hatch.version]
+path = "swift_kernel/__init__.py"
+
+# Used to call hatch_build.py
+[tool.hatch.build.hooks.custom]
+
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/swift_kernel",
+]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"data_kernelspec/share" = "share"

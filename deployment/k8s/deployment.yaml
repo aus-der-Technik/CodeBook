@@ -1,0 +1,60 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: codebook
+  namespace: codebook
+spec:
+ selector:
+   matchLabels:
+     app: codebook
+ replicas: 1 # tells deployment to run 2 pods matching the template
+ strategy:
+   rollingUpdate:
+     maxSurge: 1
+     maxUnavailable: 0
+   type: RollingUpdate
+ template: # create pods using pod definition in this template
+   metadata:
+     labels:
+       app: codebook
+   spec:
+     containers:
+     - name: codebook
+       image: docker.ausdertechnik.de/adt-services/codebook:<IMAGETAG>
+       imagePullPolicy: "Always"
+       securityContext:
+         privileged: true
+         allowPrivilegeEscalation: true
+       ports:
+         - containerPort: 31546
+       volumeMounts:
+         - name: data
+           mountPath: /data
+         - name: project
+           mountPath: /project           
+       resources:
+         requests:
+           memory: "2Gi"
+           cpu: "2"
+         limits:
+           memory: "4Gi"
+           cpu: "4"       
+       livenessProbe:
+         tcpSocket:
+           port: 31546
+       readinessProbe:
+         httpGet:
+           path: /
+           port: 31546
+
+     imagePullSecrets:
+       - name: gitlab-pullsecret
+
+     volumes:
+       - name: data
+         persistentVolumeClaim:
+           claimName: codebook-data
+       - name: project
+         persistentVolumeClaim:
+           claimName: codebook-project
