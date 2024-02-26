@@ -9,7 +9,6 @@
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/" >/dev/null 2>&1 && pwd)"
 curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/.env >> .env
-mkdir -p "${SCRIPT_DIR}/CodeBook"
 if [ ! -f "${SCRIPT_DIR}/docker-compose.yaml" ]; then
   curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/docker-compose.yaml >> "${SCRIPT_DIR}/docker-compose.yaml"
 fi
