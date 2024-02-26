@@ -27,3 +27,4 @@ services:
       - "8080:31546"
     volumes:
       - ${FOLDER}:/project
+      - ./settings.json:/root/.local/share/code-server/User/settings.json
