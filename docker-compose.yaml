@@ -24,7 +24,9 @@ services:
   codebook:
     <<: *shared_job
     ports:
-      - "8080:31546"
+      - "31546:31546"
+    network_mode: "host"
     volumes:
       - ${FOLDER}:/project
+      - ${FOLDER}/startup:/startup
       - ./settings.json:/root/.local/share/code-server/User/settings.json

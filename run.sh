@@ -14,13 +14,13 @@ SCRIPT_DIR=${SCRIPT_DIR} FOLDER="${PWD}/Project" docker-compose \
 
   sleep 2
   if [ "$(uname -s)" == "Darwin" ]; then
-    open http://localhost:8080/?folder=/project
+    open http://localhost:31546/?folder=/project
   else
     which xdg-open && true
     if [ "$?" == "0" ]; then
-      xdg-open http://localhost:8080/?folder=/project
+      xdg-open http://localhost:31546/?folder=/project
     else 
-      echo "Open http://localhost:8080/?folder=/project in your browser."
+      echo "Open http://localhost:31546/?folder=/project in your browser."
     fi
   fi
   echo ""
