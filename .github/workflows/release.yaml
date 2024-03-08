@@ -30,6 +30,11 @@ jobs:
         uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
         with:
           images: ghcr.io/${{ github.repository }}
+
+      - name: lowercase github.repository
+        run: |
+          echo "lc_repository=`echo ${{github.repository}} | tr '[:upper:]' '[:lower:]'`" >>${GITHUB_ENV}
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
@@ -38,7 +43,7 @@ jobs:
             SWIFT_VERSION=${{ env.SWIFT_VERSION }}
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository }}:latest
+            ghcr.io/${{ env.lc_repository }}:latest
             ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
