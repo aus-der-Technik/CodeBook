@@ -20,6 +20,14 @@ fi
 if [ ! -d "${SCRIPT_DIR}/startup" ]; then
 	mkdir "${SCRIPT_DIR}/startup"
 fi
+if [ ! -d "${SCRIPT_DIR}/.gitignore" ]; then
+echo "
+.DS_Store
+/settings.json
+/docker-compose.yaml
+" > "${SCRIPT_DIR}/.gitignore"
+fi
+
 
 SCRIPT_DIR=${SCRIPT_DIR} docker-compose \
     -f "${SCRIPT_DIR}/docker-compose.yaml" \

@@ -13,22 +13,22 @@ provide a unified environment for data scientists and code enthusiasts.
 - node / typescript
 - python
 - swift 
-  
+- rust  
 
 ## Installed Kernels: 
-- c          /root/.local/share/jupyter/kernels/c
-- iperl      /root/.local/share/jupyter/kernels/iperl
-- bash       /usr/local/share/jupyter/kernels/bash
-- jslab      /usr/local/share/jupyter/kernels/jslab
-- python3    /usr/local/share/jupyter/kernels/python3
-- tslab      /usr/local/share/jupyter/kernels/tslab
+- c             /root/.local/share/jupyter/kernels/c
+- iperl         /root/.local/share/jupyter/kernels/iperl
+- bash          /usr/local/share/jupyter/kernels/bash
+- jslab         /usr/local/share/jupyter/kernels/jslab
+- python3       /usr/local/share/jupyter/kernels/python3
+- tslab         /usr/local/share/jupyter/kernels/tslab
+- evcxr_jupyter /root/.local/share/jupyter/kernels/rust
   
 ## Installed and ready to go libraries 
 - Apache Spark
 
   
-## Still missing language support 
-- Rust
+## Still missing language support
 - Go
 
 # How to run codebook
@@ -43,8 +43,13 @@ Wait until your browser opens
 ![Screenshot](Resources/screenshot.png "CodeBook Screenshot")
 
 ## Quick code from withhin the current directory 
-```
+```sh
 curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/codebook.sh | sh -
 ```
 
-This will download the docker-compose file and start CodeBook from the current directory 
+This will download the docker-compose file and start CodeBook from the current directory
+
+You may want to add an alias to your system configuration: 
+```sh
+alias codebook='curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/codebook.sh | sh -'
+```

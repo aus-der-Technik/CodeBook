@@ -107,7 +107,9 @@ ADD Sources/kernel /extensions/kernel
 RUN pip3 install /extensions/kernel/echo_kernel
 RUN pip3 install /extensions/kernel/swift_kernel
 
-# RUN cargo install evcxr_jupyter -> 6.7
+RUN echo 'PATH="$PATH:/root/.cargo/bin"' >> /root/.bashrc
+RUN cargo install evcxr_jupyter; /root/.cargo/bin/evcxr_jupyter --install;
+    #cp -r /root/.local/share/jupyter/kernels/rust /extensions/kernel/rust
 
 # Setting the startp
 # ----------------------------------------------------------------------------------------
