@@ -22,7 +22,7 @@ provide a unified environment for data scientists and code enthusiasts.
 - jslab         /usr/local/share/jupyter/kernels/jslab
 - python3       /usr/local/share/jupyter/kernels/python3
 - tslab         /usr/local/share/jupyter/kernels/tslab
-- evcxr_jupyter /root/.local/share/jupyter/kernels/rust
+- Lua
   
 ## Installed and ready to go libraries 
 - Apache Spark
@@ -30,6 +30,7 @@ provide a unified environment for data scientists and code enthusiasts.
   
 ## Still missing language support
 - Go
+- (evcxr_jupyter /root/.local/share/jupyter/kernels/rust)
 
 # How to run codebook
 
