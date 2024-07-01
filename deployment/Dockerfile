@@ -24,7 +24,9 @@ RUN apt install -y \
     golang \
     libzmq3-dev libsodium23 pkg-config python3-aiozmq \
     lldb-15 rust-all \
-    openjdk-8-jdk
+    openjdk-8-jdk \
+    lua-any lua-argparse lua-check lua-cjson lua-doc lua-event lua-filesystem lua-http lua-json lua-posix lua-socket lua-system lua5.4 luadoc luajit
+
 # rust-lldb
 
 # fix LLDB
@@ -101,14 +103,15 @@ RUN pip install ipywidgets
 RUN pip install bash_kernel; python3 -m bash_kernel.install
 RUN npm install -g tslab; tslab install;
 RUN cpan -T Alien::ZMQ::latest; cpan -T Devel::IPerl; iperl kernel;
-RUN pip3 install jupyter-c-kernel; install_c_kernel;
+RUN pip install jupyter-c-kernel; install_c_kernel;
+RUN pip install ilua;
 
 ADD Sources/kernel /extensions/kernel
-RUN pip3 install /extensions/kernel/echo_kernel
-RUN pip3 install /extensions/kernel/swift_kernel
+RUN pip install /extensions/kernel/echo_kernel
+RUN pip install /extensions/kernel/swift_kernel
 
 RUN echo 'PATH="$PATH:/root/.cargo/bin"' >> /root/.bashrc
-RUN cargo install evcxr_jupyter; /root/.cargo/bin/evcxr_jupyter --install;
+#RUN cargo install evcxr_jupyter; /root/.cargo/bin/evcxr_jupyter --install;
     #cp -r /root/.local/share/jupyter/kernels/rust /extensions/kernel/rust
 
 # Setting the startp
