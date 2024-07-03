@@ -21,7 +21,7 @@ spec:
    spec:
      containers:
      - name: codebook
-       image: docker.ausdertechnik.de/adt-services/codebook:<IMAGETAG>
+       image: ghcr.io/krissimon/codebook:nightly
        imagePullPolicy: "Always"
        securityContext:
          privileged: true
@@ -35,11 +35,11 @@ spec:
            mountPath: /project           
        resources:
          requests:
-           memory: "2Gi"
-           cpu: "2"
+           memory: "1Gi"
+           cpu: "1"
          limits:
-           memory: "4Gi"
-           cpu: "4"       
+           memory: "2Gi"
+           cpu: "2"       
        livenessProbe:
          tcpSocket:
            port: 31546
