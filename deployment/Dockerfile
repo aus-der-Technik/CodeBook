@@ -67,9 +67,9 @@ RUN \
   if [ "$(arch)" = "aarch64" ]; then \
     ADD_ARCH="-$(arch)"; \
   fi \
-  && wget https://download.swift.org/swift-5.9.2-release/ubuntu2204${ADD_ARCH}/swift-5.9.2-RELEASE/swift-5.9.2-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
-  tar -xvzf swift-5.9.2-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
-  cd swift-5.9.2-RELEASE-ubuntu22.04${ADD_ARCH}; \
+  && wget https://download.swift.org/swift-5.10.1-release/ubuntu2204${ADD_ARCH}/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
+  tar -xvzf swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
+  cd swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}; \
   cp -r -T ./usr/. /usr; \
   cd /; rm -rf /build/*;
 
