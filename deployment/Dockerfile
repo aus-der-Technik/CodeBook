@@ -25,7 +25,8 @@ RUN apt install -y \
     libzmq3-dev libsodium23 pkg-config python3-aiozmq \
     lldb-15 rust-all \
     openjdk-8-jdk \
-    lua-any lua-argparse lua-check lua-cjson lua-doc lua-event lua-filesystem lua-http lua-json lua-posix lua-socket lua-system lua5.4 luadoc luajit
+    lua-any lua-argparse lua-check lua-cjson lua-doc lua-event lua-filesystem lua-http lua-json lua-posix lua-socket lua-system lua5.4 luadoc luajit \
+    tzdata
 
 # rust-lldb
 
