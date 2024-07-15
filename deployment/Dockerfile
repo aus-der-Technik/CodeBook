@@ -8,6 +8,8 @@ LABEL Description="CodeBook"
 
 # Install OS updates and, if needed
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
+RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+
 RUN apt-get update && apt-get install -y apt-utils apt-transport-https
 RUN apt update \
     && apt dist-upgrade -y
