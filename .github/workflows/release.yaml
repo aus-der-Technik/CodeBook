@@ -1,4 +1,4 @@
-name: Release Image-Processor
+name: Release CodeBook
 on:
   release:
     types: [published]
