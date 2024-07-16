@@ -28,9 +28,18 @@ RUN apt install -y \
     lldb-15 rust-all \
     openjdk-8-jdk \
     lua-any lua-argparse lua-check lua-cjson lua-doc lua-event lua-filesystem lua-http lua-json lua-posix lua-socket lua-system lua5.4 luadoc luajit \
-    tzdata
+    tzdata \
+    kubecolor
 
-# rust-lldb
+# kube
+RUN SYSARCH=$(arch); if [[ ${SYSARCH} == "aarch64" ]]; then SYSARCH=arm64; fi; \
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${SYSARCH}/kubectl"; \
+    chmod 755 kubectl; mv kubectl /usr/local/bin/;
+
+# helm
+RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null; \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list; \
+    apt-get update; apt-get install helm -y; \
 
 # fix LLDB
 RUN apt install python3-lldb-14 -y; \
