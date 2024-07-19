@@ -27,6 +27,9 @@ provide a unified environment for data scientists and code enthusiasts.
 ## Installed and ready to go libraries 
 - Apache Spark
 
+# Command-line tools
+- kubectl
+- git jq unzip
   
 ## Still missing language support
 - Go
