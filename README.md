@@ -55,5 +55,5 @@ This will download the docker-compose file and start CodeBook from the current d
 
 You may want to add an alias to your system configuration: 
 ```sh
-alias codebook='curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/codebook.sh | sh -'
+alias codebook='curl https://raw.githubusercontent.com/aus-der-Technik/CodeBook/main/codebook.sh | sh -'
 ```
