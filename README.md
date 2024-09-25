@@ -48,7 +48,7 @@ Wait until your browser opens
 
 ## Quick code from withhin the current directory 
 ```sh
-curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/codebook.sh | sh -
+curl https://raw.githubusercontent.com/aus-der-Technik/CodeBook/main/codebook.sh | sh -
 ```
 
 This will download the docker-compose file and start CodeBook from the current directory
