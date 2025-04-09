@@ -21,7 +21,7 @@ spec:
    spec:
      containers:
      - name: codebook
-       image: ghcr.io/krissimon/codebook:nightly
+       image: ghcr.io/aus-der-technik/codebook:nightly
        imagePullPolicy: "Always"
        securityContext:
          privileged: true
