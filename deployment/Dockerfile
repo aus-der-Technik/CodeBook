@@ -76,19 +76,30 @@ RUN pip install findspark
 # Install Swift
 # ----------------------------------------------------------------------------------------
 WORKDIR /build
-RUN \
-  if [ "$(arch)" = "aarch64" ]; then \
-    ADD_ARCH="-$(arch)"; \
-  fi \
-  && wget https://download.swift.org/swift-5.10.1-release/ubuntu2204${ADD_ARCH}/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
-  tar -xvzf swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
-  cd swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}; \
-  cp -r -T ./usr/. /usr; \
-  cd /; rm -rf /build/*;
+#RUN \
+#  if [ "$(arch)" = "aarch64" ]; then \
+#    ADD_ARCH="-$(arch)"; \
+#  fi \
+#  && wget https://download.swift.org/swift-5.10.1-release/ubuntu2204${ADD_ARCH}/swift-5.10.1-RELEASE/swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
+#  tar -xvzf swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}.tar.gz; \
+#  cd swift-5.10.1-RELEASE-ubuntu22.04${ADD_ARCH}; \
+#  cp -r -T ./usr/. /usr; \
+#  cd /; rm -rf /build/*;
+
+WORKDIR /opt/swiftly
+RUN curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
+    tar zxf swiftly-$(uname -m).tar.gz && \
+    ./swiftly init --quiet-shell-followup -y && \
+    . ~/.local/share/swiftly/env.sh && \
+    hash -r \
+RUN echo 'source /root/.local/share/swiftly/env.sh' >> /root/.bashrc
+
+RUN /root/.local/share/swiftly/bin/swift --version
 
 # Install NodeJS
 # ----------------------------------------------------------------------------------------
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && apt-get install -y nodejs
+WORKDIR /build
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
 
 
 # Install Code-Server
@@ -112,12 +123,14 @@ RUN rm -rf /extensions/install/*
 
 # Install Kernels
 # ----------------------------------------------------------------------------------------
+# https://github.com/jupyter/jupyter/wiki/Jupyter-kernels
 RUN pip install ipywidgets
 RUN pip install bash_kernel; python3 -m bash_kernel.install
 RUN npm install -g tslab; tslab install;
 RUN cpan -T Alien::ZMQ::latest; cpan -T Devel::IPerl; iperl kernel;
 RUN pip install jupyter-c-kernel; install_c_kernel;
 RUN pip install ilua;
+RUN pip install dockerfile-kernel; python3 -m dockerfile_kernel.install
 
 ADD Sources/kernel /extensions/kernel
 RUN pip install /extensions/kernel/echo_kernel

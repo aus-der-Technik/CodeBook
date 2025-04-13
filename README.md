@@ -23,7 +23,9 @@ provide a unified environment for data scientists and code enthusiasts.
 - python3       /usr/local/share/jupyter/kernels/python3
 - tslab         /usr/local/share/jupyter/kernels/tslab
 - Lua
-  
+- dockerfile
+
+
 ## Installed and ready to go libraries 
 - Apache Spark
 
