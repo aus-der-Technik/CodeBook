@@ -33,7 +33,7 @@ RUN apt install -y \
     openjdk-8-jdk \
     lua-any lua-argparse lua-check lua-cjson lua-doc lua-event lua-filesystem lua-http lua-json lua-posix lua-socket lua-system lua5.4 luadoc luajit \
     tzdata \
-    kubecolor \
+    kubecolor kubectx \
     php composer
 
 # kube
