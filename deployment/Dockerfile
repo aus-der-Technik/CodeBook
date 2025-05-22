@@ -42,7 +42,7 @@ RUN SYSARCH=$(arch); \
     if [ "$SYSARCH" = "x86_64" ]; then SYSARCH=amd64; fi; \
     curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${SYSARCH}/kubectl"; \
     chmod 755 kubectl; \
-    mv kubectl /usr/local/bin/ \
+    mv kubectl /usr/local/bin/
 
 # helm
 RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null; \
