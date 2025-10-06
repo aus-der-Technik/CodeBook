@@ -39,5 +39,5 @@ jobs:
           push: false
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ env.lc_repository }}:${{ steps.meta.outputs.tags }}
+            ${{ steps.meta.outputs.tags }}
 
