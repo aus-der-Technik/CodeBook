@@ -1,4 +1,39 @@
 # ----------------------------------------------------------------------------------------
+# DOWNLOADER
+# ----------------------------------------------------------------------------------------
+ARG BASEIMAGE=ubuntu:24.04
+FROM ${BASEIMAGE} AS downloader
+
+# Install OS updates and, if needed
+RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true
+RUN apt-get update && apt-get install -y apt-utils \
+    apt-transport-https \
+    software-properties-common \
+    -y
+
+RUN apt install -y \
+    curl wget
+
+WORKDIR /downloads
+
+# kubectl
+RUN SYSARCH=$(arch); \
+    if [ "$SYSARCH" = "aarch64" ]; then SYSARCH=arm64; fi; \
+    if [ "$SYSARCH" = "x86_64" ]; then SYSARCH=amd64; fi; \
+    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${SYSARCH}/kubectl"; \
+    chmod 755 /downloads/kubectl
+
+# Helm
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3; \
+    chmod 700 /downloads/get_helm.sh;
+
+# Spark
+RUN wget https://archive.apache.org/dist/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz
+
+# Swiftly
+RUN curl -o swiftly.tar.gz -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz
+
+# ----------------------------------------------------------------------------------------
 # BUILD STAGE
 # ----------------------------------------------------------------------------------------
 ARG BASEIMAGE=ubuntu:24.04
@@ -28,7 +63,7 @@ RUN apt install -y \
     glibc-tools gcc \
     cmake \
     golang \
-    libzmq3-dev libsodium23 pkg-config python3-aiozmq \
+    libsodium23 pkg-config \
     lldb-15 rust-all \
     openjdk-8-jdk \
     lua-any lua-argparse lua-check lua-cjson lua-doc lua-event lua-filesystem lua-http lua-json lua-posix lua-socket lua-system lua5.4 luadoc luajit \
@@ -36,18 +71,12 @@ RUN apt install -y \
     kubecolor kubectx \
     php composer
 
-# kube
-RUN SYSARCH=$(arch); \
-    if [ "$SYSARCH" = "aarch64" ]; then SYSARCH=arm64; fi; \
-    if [ "$SYSARCH" = "x86_64" ]; then SYSARCH=amd64; fi; \
-    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${SYSARCH}/kubectl"; \
-    chmod 755 kubectl; \
-    mv kubectl /usr/local/bin/
+# kubectl
+COPY --from=downloader /downloads/kubectl /usr/local/bin/
 
 # helm
-RUN curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | tee /usr/share/keyrings/helm.gpg > /dev/null; \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | tee /etc/apt/sources.list.d/helm-stable-debian.list; \
-    apt-get update; apt-get install helm -y;
+COPY --from=downloader /downloads/get_helm.sh /tmp/get_helm.sh
+RUN  /tmp/get_helm.sh
 
 # fix LLDB
 RUN apt install python3-lldb-14 -y; \
@@ -61,7 +90,6 @@ RUN pip install setuptools --break-system-packages
 RUN mkdir /project && chmod 777 /project
 COPY ./Sources/entrypoint.sh /
 
-
 # Install Python 
 # ----------------------------------------------------------------------------------------
 RUN ln -s /usr/bin/python3 /usr/bin/python 
@@ -69,25 +97,23 @@ RUN ln -s /usr/bin/python3 /usr/bin/python
 # Install Spark
 # ----------------------------------------------------------------------------------------
 WORKDIR /opt/spark
-RUN wget https://archive.apache.org/dist/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz; \
-    tar -xvzf spark-3.5.5-bin-hadoop3.tgz; \
+COPY --from=downloader /downloads/spark-3.5.5-bin-hadoop3.tgz /opt/spark/spark-3.5.5-bin-hadoop3.tgz
+RUN tar -xvzf spark-3.5.5-bin-hadoop3.tgz; \
     rm spark-3.5.5-bin-hadoop3.tgz
 ENV SPARK_HOME=/opt/spark/spark-3.5.5-bin-hadoop3
 RUN echo 'SPARK_HOME=/opt/spark/spark-3.5.5-bin-hadoop3' >> /root/.bashrc
 RUN echo 'PATH="$JAVA_HOME/bin:$SPARK_HOME/bin:$PATH"' >> /root/.bashrc 
 RUN pip install findspark --break-system-packages
 
-
 # Install Swift
 # ----------------------------------------------------------------------------------------
 WORKDIR /opt/swiftly
-RUN curl -O https://download.swift.org/swiftly/linux/swiftly-$(uname -m).tar.gz && \
-    tar zxf swiftly-$(uname -m).tar.gz && \
+COPY --from=downloader /downloads/swiftly.tar.gz /opt/swiftly/swiftly.tar.gz
+RUN tar zxf swiftly.tar.gz && \
     ./swiftly init --quiet-shell-followup -y && \
     . ~/.local/share/swiftly/env.sh && \
     hash -r \
 RUN echo 'source /root/.local/share/swiftly/env.sh' >> /root/.bashrc
-
 RUN /root/.local/share/swiftly/bin/swift --version
 
 # Install NodeJS
@@ -120,7 +146,10 @@ RUN rm -rf /extensions/install/*
 RUN pip install ipywidgets --break-system-packages
 RUN pip install bash_kernel --break-system-packages; python3 -m bash_kernel.install
 RUN npm install -g tslab --break-system-packages; tslab install;
+
+RUN apt install -y libzmq3-dev python3-aiozmq # need to install it late, because of some python dependencies
 RUN cpan -T Alien::ZMQ::latest; cpan -T Devel::IPerl; iperl kernel;
+
 RUN pip install jupyter-c-kernel --break-system-packages; install_c_kernel;
 RUN pip install ilua --break-system-packages;
 RUN pip install dockerfile-kernel --break-system-packages; python3 -m dockerfile_kernel.install
@@ -130,7 +159,7 @@ RUN pip install /extensions/kernel/echo_kernel --break-system-packages
 RUN pip install /extensions/kernel/swift_kernel --break-system-packages
 
 RUN echo 'PATH="$PATH:/root/.cargo/bin"' >> /root/.bashrc
-#RUN cargo install evcxr_jupyter; /root/.cargo/bin/evcxr_jupyter --install;
+#RUN cargo install --locked evcxr_jupyter; /root/.cargo/bin/evcxr_jupyter --install;
     #cp -r /root/.local/share/jupyter/kernels/rust /extensions/kernel/rust
 
 # Setting the startp

@@ -3,19 +3,19 @@
 #
 # Setup script to run CodeBook on current folder
 #
-# curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/codebook.sh | sh -
+# curl https://raw.githubusercontent.com/aus-der-Technik//CodeBook/main/codebook.sh | sh -
 #
 
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/" >/dev/null 2>&1 && pwd)"
 if [ ! -f "${SCRIPT_DIR}/.env" ]; then
-	curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/.env >> .env
+	curl https://raw.githubusercontent.com/aus-der-Technik//CodeBook/main/.env >> .env
 fi
 if [ ! -f "${SCRIPT_DIR}/docker-compose.yaml" ]; then
-  curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/docker-compose.yaml >> "${SCRIPT_DIR}/docker-compose.yaml"
+  curl https://raw.githubusercontent.com/aus-der-Technik//CodeBook/main/docker-compose.yaml >> "${SCRIPT_DIR}/docker-compose.yaml"
 fi
 if [ ! -f "${SCRIPT_DIR}/settings.json" ]; then
-  curl https://raw.githubusercontent.com/KrisSimon/CodeBook/main/settings.json >> "${SCRIPT_DIR}/settings.json"
+  curl https://raw.githubusercontent.com/aus-der-Technik//CodeBook/main/settings.json >> "${SCRIPT_DIR}/settings.json"
 fi
 if [ ! -d "${SCRIPT_DIR}/startup" ]; then
 	mkdir "${SCRIPT_DIR}/startup"

@@ -1,5 +1,4 @@
-version: '3.7'
-
+# CodeBook Deployment
 x-shared_environment: &shared_environment
   BASEIMAGE: ${BASEIMAGE}
   IMAGE: ${IMAGE}
