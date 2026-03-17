@@ -129,7 +129,7 @@ ADD Sources/*.vsix /extensions/install/
 RUN chmod -R 777 /extensions
 
 # Install public extensions
-RUN for ext in vadimcn.vscode-lldb zaaack.markdown-editor ms-toolsai.jupyter ms-python.python stateful.runme rust-lang.rust; do \
+RUN for ext in vadimcn.vscode-lldb zaaack.markdown-editor ms-toolsai.jupyter ms-python.python stateful.runme rust-lang.rust genuitecllc.codetogether typefox.open-collaboration-tools; do \
   code-server --disable-telemetry --extensions-dir /extensions --install-extension ${ext}; \
   done;
 
