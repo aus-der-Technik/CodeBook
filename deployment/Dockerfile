@@ -103,7 +103,7 @@ RUN tar -xvzf spark-3.5.5-bin-hadoop3.tgz; \
 ENV SPARK_HOME=/opt/spark/spark-3.5.5-bin-hadoop3
 RUN echo 'SPARK_HOME=/opt/spark/spark-3.5.5-bin-hadoop3' >> /root/.bashrc
 RUN echo 'PATH="$JAVA_HOME/bin:$SPARK_HOME/bin:$PATH"' >> /root/.bashrc 
-RUN pip install findspark --break-system-packages
+RUN pip install findspark boto3 --break-system-packages
 
 # Install Swift
 # ----------------------------------------------------------------------------------------
